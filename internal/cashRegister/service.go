@@ -12,7 +12,8 @@ import (
 // Service is the default Service interface
 // implementation returned byNewService.
 type Service struct {
-	repository storage.Repository
+	rulesEngine func(request models.Item) []Rule
+	repository  storage.Repository
 }
 
 type ProductRequest struct {
@@ -25,8 +26,8 @@ type BasketRequest struct {
 }
 
 // NewService returns the default Service interface implementation.
-func NewService(repository storage.Repository) Service {
-	return Service{repository: repository}
+func NewService(rules func(request models.Item) []Rule, repository storage.Repository) Service {
+	return Service{rulesEngine: rules, repository: repository}
 }
 
 // CreateBasket create a basket.
@@ -155,4 +156,38 @@ func (s Service) createItem(basket models.Basket, productCode string) (models.It
 	}
 
 	return item, nil
+}
+
+// CheckoutBasket close a basket.
+// require a basket id
+// it will return a basket if this is ok.
+// otherwise will return  error
+func (s Service) CheckoutBasket(ctx context.Context, basketID string) (models.Basket, error) {
+	var basket models.Basket
+	basket, err := s.repository.FindBasketByID(ctx, basketID)
+	if err != nil {
+		return models.Basket{}, err
+	}
+
+	if basket.Close {
+		return basket, nil
+	}
+
+	for _, item := range basket.Items {
+		rulesItem := s.rulesEngine(item)
+		for _, r := range rulesItem {
+			item = r.fn(item, r)
+		}
+
+		basket.Items[item.Product.Code] = item
+	}
+
+	basket.CalculateTotal()
+	basket.Close = true
+	basket, err = s.repository.UpdateBasket(ctx, basket)
+	if err != nil {
+		return models.Basket{}, err
+	}
+
+	return basket, nil
 }

@@ -2,14 +2,14 @@ package cashRegister
 
 import "github.com/patriciabonaldy/cash_register/internal/models"
 
-type rulesMap map[ruleName]func(request *models.Item, rule Rule) func(item *models.Item, rule Rule) *models.Item
+type rulesMap map[ruleName]func(request models.Item, rule Rule) func(item models.Item, rule Rule) models.Item
 
 var _rulesMap = rulesMap{
 	"buy_two_by_one_free":         buyTwoByOneFree,
 	"buy_three_or_more_new_price": buyThreeOrMoreNewPrice,
 }
 
-func buyTwoByOneFree(request *models.Item, rule Rule) func(item *models.Item, rule Rule) *models.Item {
+func buyTwoByOneFree(request models.Item, rule Rule) func(item models.Item, rule Rule) models.Item {
 	if request.Product.Code != rule.Product {
 		return nil
 	}
@@ -21,7 +21,7 @@ func buyTwoByOneFree(request *models.Item, rule Rule) func(item *models.Item, ru
 	return discountBuyingTwoGetOneFree
 }
 
-func buyThreeOrMoreNewPrice(request *models.Item, rule Rule) func(item *models.Item, rule Rule) *models.Item {
+func buyThreeOrMoreNewPrice(request models.Item, rule Rule) func(item models.Item, rule Rule) models.Item {
 	if request.Product.Code != rule.Product {
 		return nil
 	}
@@ -33,11 +33,11 @@ func buyThreeOrMoreNewPrice(request *models.Item, rule Rule) func(item *models.I
 	return discount3OrMore
 }
 
-func getRules(request *models.Item, rmap rulesMap, config config) []Rule {
+func getRules(request models.Item) []Rule {
 	ruleList := []Rule{}
 
-	for name, ruleApplies := range rmap {
-		rConfig := config.Rules[name]
+	for name, ruleApplies := range _rulesMap {
+		rConfig := configRules.Rules[name]
 
 		if fn := ruleApplies(request, rConfig); fn != nil {
 			rConfig.fn = fn
@@ -51,7 +51,7 @@ func getRules(request *models.Item, rmap rulesMap, config config) []Rule {
 // discountBuyingTwoGetOneFree function
 // Check if client buy 1 or more the same type
 // gift one free
-func discountBuyingTwoGetOneFree(item *models.Item, _ Rule) *models.Item {
+func discountBuyingTwoGetOneFree(item models.Item, _ Rule) models.Item {
 	product := item.Product
 	total := product.Price * float64(item.Quantity)
 	item.Quantity++
@@ -63,7 +63,7 @@ func discountBuyingTwoGetOneFree(item *models.Item, _ Rule) *models.Item {
 // discount3OrMore function
 // Check if client buy 3 or more the same type
 // then we will apply a new price
-func discount3OrMore(item *models.Item, rule Rule) *models.Item {
+func discount3OrMore(item models.Item, rule Rule) models.Item {
 	var discountAmount float64
 	discountAmount = rule.NewPrice * float64(item.Quantity)
 	item.Total = discountAmount

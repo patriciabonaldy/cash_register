@@ -11,7 +11,7 @@ func TestDiscount3OrMore(t *testing.T) {
 			item := Item{
 				Product: Product{
 					Code:  "TSHIRT",
-					Name:  "Tshirt",
+					Name:  "TSHIRT",
 					Price: 20,
 				},
 				Quantity: 3,
@@ -20,7 +20,7 @@ func TestDiscount3OrMore(t *testing.T) {
 			want := Item{
 				Product: Product{
 					Code:  "TSHIRT",
-					Name:  "Tshirt",
+					Name:  "TSHIRT",
 					Price: 20,
 				},
 				Quantity: 3,
@@ -37,7 +37,7 @@ func TestDiscountBuyingTwoGetOneFree(t *testing.T) {
 		item := Item{
 			Product: Product{
 				Code:  "TSHIRT",
-				Name:  "Tshirt",
+				Name:  "TSHIRT",
 				Price: 20,
 			},
 			Quantity: 3,
@@ -46,7 +46,7 @@ func TestDiscountBuyingTwoGetOneFree(t *testing.T) {
 		want := Item{
 			Product: Product{
 				Code:  "TSHIRT",
-				Name:  "Tshirt",
+				Name:  "TSHIRT",
 				Price: 20,
 			},
 			Quantity: 4,

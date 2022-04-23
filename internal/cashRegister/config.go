@@ -13,7 +13,7 @@ import (
 var data []byte
 
 // Config represents the structure to store all about limit configuration.
-type config struct {
+type Config struct {
 	Rules rules `yaml:"rules"`
 }
 
@@ -29,11 +29,11 @@ type Rule struct {
 	Product  string   `yaml:"product"`
 	Quantity int      `yaml:"quantity"`
 	NewPrice float64  `yaml:"newPrice,omitempty"`
-	fn       func(item *models.Item, rule Rule) *models.Item
+	fn       func(item models.Item, rule Rule) models.Item
 }
 
 // configRules are by default
-var configRules config
+var configRules Config
 
 // loadConfig function load configuration of rules through yaml file
 func loadConfig() error {

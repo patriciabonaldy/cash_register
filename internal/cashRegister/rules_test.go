@@ -12,12 +12,12 @@ import (
 func Test_getRules(t *testing.T) {
 	tests := []struct {
 		name    string
-		request *models.Item
+		request models.Item
 		want    []Rule
 	}{
 		{
 			name: "unknown product",
-			request: &models.Item{
+			request: models.Item{
 				Product: models.Product{
 					Code:  "UNKNOWN",
 					Name:  "UNKNOWN",
@@ -30,7 +30,7 @@ func Test_getRules(t *testing.T) {
 		},
 		{
 			name: "buy_two_by_one_free",
-			request: &models.Item{
+			request: models.Item{
 				Product: models.Product{
 					Code: "VOUCHER",
 					Name: "VOUCHER",
@@ -50,7 +50,7 @@ func Test_getRules(t *testing.T) {
 		},
 		{
 			name: "buy_three_or_more_new_price",
-			request: &models.Item{
+			request: models.Item{
 				Product: models.Product{
 					Code: "TSHIRT",
 					Name: "TSHIRT",
@@ -75,7 +75,7 @@ func Test_getRules(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := getRules(tt.request, _rulesMap, configRules)
+			r := getRules(tt.request)
 			want, err := json.Marshal(tt.want)
 			require.NoError(t, err)
 
