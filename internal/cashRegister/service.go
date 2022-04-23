@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-
 	"github.com/patriciabonaldy/cash_register/internal/models"
 	"github.com/patriciabonaldy/cash_register/internal/platform/storage"
 )
@@ -14,15 +13,6 @@ import (
 type Service struct {
 	rulesEngine func(request models.Item) []Rule
 	repository  storage.Repository
-}
-
-type ProductRequest struct {
-	BasketID    string `json:"basket_id" binding:"required"`
-	ProductCode string `json:"product_code" binding:"required"`
-}
-
-type BasketRequest struct {
-	BasketID string `json:"basket_id" binding:"required"`
 }
 
 // NewService returns the default Service interface implementation.
@@ -76,8 +66,8 @@ func (s Service) RemoveBasket(ctx context.Context, id string) error {
 // require a basket id and product code
 // it will return a basket if this is ok.
 // otherwise will return  error
-func (s Service) AddProduct(ctx context.Context, request ProductRequest) (models.Basket, error) {
-	var basket, err = s.repository.FindBasketByID(ctx, request.BasketID)
+func (s Service) AddProduct(ctx context.Context, basketID, productCode string) (models.Basket, error) {
+	var basket, err = s.repository.FindBasketByID(ctx, basketID)
 	if err != nil {
 		return models.Basket{}, err
 	}
@@ -86,9 +76,9 @@ func (s Service) AddProduct(ctx context.Context, request ProductRequest) (models
 		return models.Basket{}, models.ErrBasketIsClosed
 	}
 
-	item, err := s.repository.GetItem(ctx, request.BasketID, request.ProductCode)
+	item, err := s.repository.GetItem(ctx, basketID, productCode)
 	if err != nil {
-		item, err = s.createItem(basket, request.ProductCode)
+		item, err = s.createItem(basket, productCode)
 		if err != nil {
 			return models.Basket{}, err
 		}
@@ -112,13 +102,13 @@ func (s Service) AddProduct(ctx context.Context, request ProductRequest) (models
 // require a basket id and product code
 // it will return a basket if this is ok.
 // otherwise will return  error
-func (s Service) RemoveProduct(ctx context.Context, request ProductRequest) (models.Basket, error) {
-	_, ok := models.ProductMap[request.ProductCode]
+func (s Service) RemoveProduct(ctx context.Context, basketID, productCode string) (models.Basket, error) {
+	_, ok := models.ProductMap[productCode]
 	if !ok {
 		return models.Basket{}, models.ErrProductNotFound
 	}
 
-	var basket, err = s.repository.FindBasketByID(ctx, request.BasketID)
+	var basket, err = s.repository.FindBasketByID(ctx, basketID)
 	if err != nil {
 		return models.Basket{}, err
 	}
@@ -127,7 +117,7 @@ func (s Service) RemoveProduct(ctx context.Context, request ProductRequest) (mod
 		return models.Basket{}, models.ErrBasketIsClosed
 	}
 
-	basket, err = s.repository.RemoveProduct(ctx, request.BasketID, request.ProductCode)
+	basket, err = s.repository.RemoveProduct(ctx, basketID, productCode)
 	if err != nil {
 		return models.Basket{}, err
 	}
@@ -167,10 +157,6 @@ func (s Service) CheckoutBasket(ctx context.Context, basketID string) (models.Ba
 	basket, err := s.repository.FindBasketByID(ctx, basketID)
 	if err != nil {
 		return models.Basket{}, err
-	}
-
-	if basket.Close {
-		return basket, nil
 	}
 
 	for _, item := range basket.Items {

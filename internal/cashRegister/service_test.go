@@ -109,11 +109,7 @@ func TestService_AddProduct_First_Time_Success(t *testing.T) {
 	repositoryMock.On("UpdateBasket", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(basketExpected, nil).Once()
 
 	service := NewService(nil, repositoryMock)
-	request := ProductRequest{
-		BasketID:    "4200f350-4fa5-11ec-a386-1e003b1e5256",
-		ProductCode: "TSHIRT",
-	}
-	basket, err := service.AddProduct(context.Background(), request)
+	basket, err := service.AddProduct(context.Background(), "4200f350-4fa5-11ec-a386-1e003b1e5256", "TSHIRT")
 
 	assert.NoError(t, err)
 	assert.Equal(t, basketExpected, basket)
@@ -176,11 +172,7 @@ func TestService_AddProduct_Success(t *testing.T) {
 	repositoryMock.On("UpdateBasket", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(basketExpected, nil)
 
 	service := NewService(nil, repositoryMock)
-	request := ProductRequest{
-		BasketID:    "4200f350-4fa5-11ec-a386-1e003b1e5256",
-		ProductCode: "TSHIRT",
-	}
-	basket, err := service.AddProduct(context.Background(), request)
+	basket, err := service.AddProduct(context.Background(), "4200f350-4fa5-11ec-a386-1e003b1e5256", "TSHIRT")
 	assert.NoError(t, err)
 	assert.Equal(t, basketExpected, basket)
 }
@@ -196,11 +188,7 @@ func TestService_Remove_Product_Success(t *testing.T) {
 	repositoryMock.On("RemoveProduct", mock.Anything, mock.Anything, mock.Anything).Return(basketExpected, nil).Once()
 
 	service := NewService(nil, repositoryMock)
-	request := ProductRequest{
-		BasketID:    "4200f350-4fa5-11ec-a386-1e003b1e5256",
-		ProductCode: "PANTS",
-	}
-	basket, err := service.RemoveProduct(context.Background(), request)
+	basket, err := service.RemoveProduct(context.Background(), "4200f350-4fa5-11ec-a386-1e003b1e5256", "TSHIRT")
 	repositoryMock.AssertExpectations(t)
 	assert.NoError(t, err)
 	assert.Equal(t, basketExpected, basket)
@@ -211,11 +199,7 @@ func TestService_Remove_Product_UnSuccess(t *testing.T) {
 	repositoryMock.On("RemoveProduct", mock.Anything, mock.Anything, mock.Anything).Return(models.Basket{}, models.ErrItemNotFound)
 
 	service := NewService(nil, repositoryMock)
-	request := ProductRequest{
-		BasketID:    "4200f350-4fa5-11ec-a386-1e003b1e5256",
-		ProductCode: "DRESS",
-	}
-	_, err := service.RemoveProduct(context.Background(), request)
+	_, err := service.RemoveProduct(context.Background(), "4200f350-4fa5-11ec-a386-1e003b1e5256", "DRESS")
 	assert.Equal(t, models.ErrProductNotFound, err)
 
 	// basket is closed and we try remove one product
@@ -227,8 +211,7 @@ func TestService_Remove_Product_UnSuccess(t *testing.T) {
 	}
 	repositoryMock.On("FindBasketByID", mock.Anything, mock.Anything).Return(basketExpected, nil)
 	repositoryMock.On("RemoveProduct", mock.Anything, mock.Anything, mock.Anything).Return(basketExpected, nil)
-	request.ProductCode = "PANTS"
-	_, err = service.RemoveProduct(context.Background(), request)
+	_, err = service.RemoveProduct(context.Background(), "4200f350-4fa5-11ec-a386-1e003b1e5256", "PANTS")
 	assert.EqualError(t, err, "basket is closed")
 }
 

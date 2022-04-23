@@ -3,8 +3,8 @@ package bootstrap
 import (
 	"log"
 
+	"github.com/patriciabonaldy/cash_register/cmd/bootstrap/handler"
 	"github.com/patriciabonaldy/cash_register/internal/cashRegister"
-	"github.com/patriciabonaldy/cash_register/internal/platform/server"
 	"github.com/patriciabonaldy/cash_register/internal/platform/storage/memory"
 )
 
@@ -21,6 +21,7 @@ func Run() error {
 
 	repository := memory.NewRepository()
 	service := cashRegister.NewService(cashRegister.RulesEngine, repository)
-	srv := server.New(port, service)
+	handler := handler.New(service)
+	srv := New(port, handler)
 	return srv.Run()
 }

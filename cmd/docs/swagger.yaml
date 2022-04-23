@@ -1,0 +1,210 @@
+basePath: /
+definitions:
+  handler.Item:
+    properties:
+      product:
+        $ref: '#/definitions/handler.Product'
+      quantity:
+        type: integer
+      total:
+        type: number
+    type: object
+  handler.Product:
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  handler.Response:
+    properties:
+      basket_id:
+        description: basket id
+        type: string
+      items:
+        description: items
+        items:
+          $ref: '#/definitions/handler.Item'
+        type: array
+      total:
+        description: total
+        type: number
+    type: object
+host: 0.0.0.0:8080
+info:
+  contact: {}
+  description: Description of specifications
+  title: API document title
+  version: version(1.0)
+paths:
+  /baskets:
+    post:
+      consumes:
+      - application/json
+      description: return 201 if this could be created. Otherwise, it will return
+        500
+      produces:
+      - text/plain
+      responses:
+        "201":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: bad Request
+          schema:
+            type: string
+        "500":
+          description: fail
+          schema:
+            type: string
+      summary: Create a new basket.
+      tags:
+      - basket
+  /baskets/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: requires a basket ID example:"0bfce8da-bdc9-11ec-b9f3-acde48001122"
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+        "500":
+          description: ""
+      summary: remove a basket
+      tags:
+      - basket
+    get:
+      consumes:
+      - application/json
+      description: requires a basket ID example:"0bfce8da-bdc9-11ec-b9f3-acde48001122"
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: Show all products of basket
+      tags:
+      - basket
+  /baskets/{id}/checkout:
+    post:
+      consumes:
+      - application/json
+      description: requires a basket id, close of basket and will show details of
+        order.
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: close a basket
+      tags:
+      - basket
+  /baskets/{id}/products/{code}:
+    delete:
+      consumes:
+      - application/json
+      description: requires a basket id, and a product code. if product/code not exists
+        then return "product does not exist"
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: CODE
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: ""
+        "400":
+          description: ""
+        "500":
+          description: ""
+      summary: remove a product in the basket.
+      tags:
+      - basket
+    post:
+      consumes:
+      - application/json
+      description: requires a basket id, and a product code. if product/code not exists
+        then return "product does not exist"
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: CODE
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: add a new product to basket.
+      tags:
+      - basket
+swagger: "2.0"
