@@ -4,7 +4,7 @@ const (
 	Voucher                = "VOUCHER"
 	Tshirt                 = "TSHIRT"
 	Pants                  = "PANTS"
-	VoucherQuantity        = 2
+	VoucherQuantity        = 1
 	PriceDiscount          = 19
 	TshirtQuantityDiscount = 3
 )
@@ -62,12 +62,12 @@ func (i *Item) WithOutDiscount() {
 
 // Discount3OrMore function
 // Check if client buy 3 or more the same type
-// apply 25% discount over amount
+// then we will apply a new price
 func Discount3OrMore(item Item) Item {
 	var discountAmount float64
 	product := item.Product
 	if item.Quantity >= TshirtQuantityDiscount {
-		discountAmount = (product.Price * float64(item.Quantity)) - ((product.Price * float64(item.Quantity)) * PriceDiscount)
+		discountAmount = PriceDiscount * float64(item.Quantity)
 		item.Total = discountAmount
 
 		return item
@@ -80,7 +80,7 @@ func Discount3OrMore(item Item) Item {
 }
 
 // DiscountBuyingTwoGetOneFree function
-// Check if client buy 2 or more the same type
+// Check if client buy 1 or more the same type
 // gift one free
 func DiscountBuyingTwoGetOneFree(item Item) Item {
 	product := item.Product
