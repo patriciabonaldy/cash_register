@@ -15,6 +15,15 @@ type Service struct {
 	repository storage.Repository
 }
 
+type ProductRequest struct {
+	BasketID    string `json:"basket_id" binding:"required"`
+	ProductCode string `json:"product_code" binding:"required"`
+}
+
+type BasketRequest struct {
+	BasketID string `json:"basket_id" binding:"required"`
+}
+
 // NewService returns the default Service interface implementation.
 func NewService(repository storage.Repository) Service {
 	return Service{repository: repository}
@@ -60,4 +69,63 @@ func (s Service) RemoveBasket(ctx context.Context, id string) error {
 	}
 
 	return nil
+}
+
+// AddProduct add a new product into basket.
+// require a basket id and product code
+// it will return a basket if this is ok.
+// otherwise will return  error
+func (s Service) AddProduct(ctx context.Context, request ProductRequest) (models.Basket, error) {
+	var basket, err = s.repository.FindBasketByID(ctx, request.BasketID)
+	if err != nil {
+		return models.Basket{}, err
+	}
+
+	if basket.Close {
+		return models.Basket{}, models.ErrBasketIsClosed
+	}
+
+	item, err := s.repository.GetItem(ctx, request.BasketID, request.ProductCode)
+	if err != nil {
+		item, err = s.createItem(basket, request.ProductCode)
+		if err != nil {
+			return models.Basket{}, err
+		}
+	}
+
+	item.Quantity++
+	item.WithOutDiscount()
+	code := item.Product.Code
+	basket.Items[code] = item
+	basket.CalculateTotal()
+
+	basket, err = s.repository.UpdateBasket(ctx, basket)
+	if err != nil {
+		return models.Basket{}, err
+	}
+
+	return basket, nil
+}
+
+func (s Service) createItem(basket models.Basket, productCode string) (models.Item, error) {
+	if basket.Close {
+		return models.Item{}, models.ErrBasketIsClosed
+	}
+
+	product, ok := models.ProductMap[productCode]
+	if !ok {
+		return models.Item{}, models.ErrProductNotFound
+	}
+
+	item, ok := basket.Items[product.Code]
+	if !ok {
+		_item := models.Item{
+			Product: product,
+		}
+		_item.WithOutDiscount()
+
+		return _item, nil
+	}
+
+	return item, nil
 }

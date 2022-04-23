@@ -2,10 +2,11 @@ package cashRegister
 
 import (
 	"encoding/json"
+	"testing"
+
 	"github.com/patriciabonaldy/cash_register/internal/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func Test_getRules(t *testing.T) {
