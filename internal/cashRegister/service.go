@@ -107,6 +107,33 @@ func (s Service) AddProduct(ctx context.Context, request ProductRequest) (models
 	return basket, nil
 }
 
+// RemoveProduct remove product inside basket.
+// require a basket id and product code
+// it will return a basket if this is ok.
+// otherwise will return  error
+func (s Service) RemoveProduct(ctx context.Context, request ProductRequest) (models.Basket, error) {
+	_, ok := models.ProductMap[request.ProductCode]
+	if !ok {
+		return models.Basket{}, models.ErrProductNotFound
+	}
+
+	var basket, err = s.repository.FindBasketByID(ctx, request.BasketID)
+	if err != nil {
+		return models.Basket{}, err
+	}
+
+	if basket.Close {
+		return models.Basket{}, models.ErrBasketIsClosed
+	}
+
+	basket, err = s.repository.RemoveProduct(ctx, request.BasketID, request.ProductCode)
+	if err != nil {
+		return models.Basket{}, err
+	}
+
+	return basket, nil
+}
+
 func (s Service) createItem(basket models.Basket, productCode string) (models.Item, error) {
 	if basket.Close {
 		return models.Item{}, models.ErrBasketIsClosed

@@ -182,3 +182,50 @@ func TestService_AddProduct_Success(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, basketExpected, basket)
 }
+
+func TestService_Remove_Product_Success(t *testing.T) {
+	basketExpected := models.Basket{
+		Code:  "4200f350-4fa5-11ec-a386-1e003b1e5256",
+		Items: make(map[string]models.Item),
+		Total: 0,
+	}
+	repositoryMock := new(storagemocks.Repository)
+	repositoryMock.On("FindBasketByID", mock.Anything, mock.Anything).Return(basketExpected, nil)
+	repositoryMock.On("RemoveProduct", mock.Anything, mock.Anything, mock.Anything).Return(basketExpected, nil).Once()
+
+	service := NewService(repositoryMock)
+	request := ProductRequest{
+		BasketID:    "4200f350-4fa5-11ec-a386-1e003b1e5256",
+		ProductCode: "PANTS",
+	}
+	basket, err := service.RemoveProduct(context.Background(), request)
+	repositoryMock.AssertExpectations(t)
+	assert.NoError(t, err)
+	assert.Equal(t, basketExpected, basket)
+}
+
+func TestService_Remove_Product_UnSuccess(t *testing.T) {
+	repositoryMock := new(storagemocks.Repository)
+	repositoryMock.On("RemoveProduct", mock.Anything, mock.Anything, mock.Anything).Return(models.Basket{}, models.ErrItemNotFound)
+
+	service := NewService(repositoryMock)
+	request := ProductRequest{
+		BasketID:    "4200f350-4fa5-11ec-a386-1e003b1e5256",
+		ProductCode: "DRESS",
+	}
+	_, err := service.RemoveProduct(context.Background(), request)
+	assert.Equal(t, models.ErrProductNotFound, err)
+
+	// basket is closed and we try remove one product
+	basketExpected := models.Basket{
+		Code:  "4200f350-4fa5-11ec-a386-1e003b1e5256",
+		Items: make(map[string]models.Item),
+		Total: 0,
+		Close: true,
+	}
+	repositoryMock.On("FindBasketByID", mock.Anything, mock.Anything).Return(basketExpected, nil)
+	repositoryMock.On("RemoveProduct", mock.Anything, mock.Anything, mock.Anything).Return(basketExpected, nil)
+	request.ProductCode = "PANTS"
+	_, err = service.RemoveProduct(context.Background(), request)
+	assert.EqualError(t, err, "basket is closed")
+}
