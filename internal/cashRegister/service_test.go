@@ -305,7 +305,7 @@ func TestService_CheckoutBasket(t *testing.T) {
 	repositoryMock.On("FindBasketByID", mock.Anything, mock.Anything).Return(basketMock, nil)
 	repositoryMock.On("UpdateBasket", mock.Anything, mock.Anything).Return(basketExpected, nil)
 
-	service := NewService(getRules, repositoryMock)
+	service := NewService(RulesEngine, repositoryMock)
 	basketID := "4200f350-4fa5-11ec-a386-1e003b1e5256"
 
 	err := loadConfig()

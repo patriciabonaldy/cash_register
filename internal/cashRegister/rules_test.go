@@ -75,7 +75,7 @@ func Test_getRules(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := getRules(tt.request)
+			r := RulesEngine(tt.request)
 			want, err := json.Marshal(tt.want)
 			require.NoError(t, err)
 

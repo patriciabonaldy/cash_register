@@ -33,7 +33,7 @@ func buyThreeOrMoreNewPrice(request models.Item, rule Rule) func(item models.Ite
 	return discount3OrMore
 }
 
-func getRules(request models.Item) []Rule {
+func RulesEngine(request models.Item) []Rule {
 	ruleList := []Rule{}
 
 	for name, ruleApplies := range _rulesMap {
