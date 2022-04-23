@@ -49,3 +49,15 @@ func (s Service) GetBasket(ctx context.Context, id string) (models.Basket, error
 
 	return basket, nil
 }
+
+// RemoveBasket remove a basket.
+// it will remove basket if this is ok.
+// otherwise will return error
+func (s Service) RemoveBasket(ctx context.Context, id string) error {
+	err := s.repository.RemoveBasket(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

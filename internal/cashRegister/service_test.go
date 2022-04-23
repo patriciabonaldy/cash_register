@@ -53,3 +53,25 @@ func TestService_GetBasketBasket_Success(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, basketExpected, basket)
 }
+
+func TestService_Remove_Basket_Success(t *testing.T) {
+	repositoryMock := new(storagemocks.Repository)
+	repositoryMock.On("RemoveBasket", mock.Anything, mock.Anything).Return(nil)
+
+	service := NewService(repositoryMock)
+	err := service.RemoveBasket(context.Background(), "4200f350-4fa5-11ec-a386-1e003b1e5256")
+
+	repositoryMock.AssertExpectations(t)
+	assert.NoError(t, err)
+}
+
+func TestService_Remove_Basket_Unsuccess(t *testing.T) {
+	repositoryMock := new(storagemocks.Repository)
+	repositoryMock.On("RemoveBasket", mock.Anything, mock.Anything).Return(models.ErrBasketNotFound)
+
+	service := NewService(repositoryMock)
+	err := service.RemoveBasket(context.Background(), "4200f350-4fa5-11ec-a386-1e003b1e5256")
+
+	repositoryMock.AssertExpectations(t)
+	assert.Equal(t, models.ErrBasketNotFound, err)
+}
