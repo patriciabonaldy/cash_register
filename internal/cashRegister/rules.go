@@ -52,10 +52,7 @@ func RulesEngine(request models.Item) []Rule {
 // Check if client buy 1 or more the same type
 // gift one free
 func discountBuyingTwoGetOneFree(item models.Item, _ Rule) models.Item {
-	product := item.Product
-	total := product.Price * float64(item.Quantity)
-	item.Quantity++
-	item.Total = total
+	item.Total = item.Product.Price + float64(item.Quantity-1)
 
 	return item
 }

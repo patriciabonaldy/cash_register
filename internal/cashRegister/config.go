@@ -35,8 +35,8 @@ type Rule struct {
 // configRules are by default
 var configRules Config
 
-// loadConfig function load configuration of rules through yaml file
-func loadConfig() error {
+// LoadRulesConfig function load configuration of rules through yaml file
+func LoadRulesConfig() error {
 	err := yaml.Unmarshal(data, &configRules)
 	if err != nil {
 		return fmt.Errorf("couldn't parse yaml file.: %s", err)

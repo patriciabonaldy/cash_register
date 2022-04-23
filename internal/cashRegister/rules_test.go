@@ -35,14 +35,14 @@ func Test_getRules(t *testing.T) {
 					Code: "VOUCHER",
 					Name: "VOUCHER",
 				},
-				Quantity: 1,
+				Quantity: 2,
 			},
 			want: []Rule{
 				{
 					Name:     "buy_two_by_one_free",
 					Desc:     "A 2-for-1 special on VOUCHER items.",
 					Product:  "VOUCHER",
-					Quantity: 1,
+					Quantity: 2,
 					NewPrice: 0,
 					fn:       discountBuyingTwoGetOneFree,
 				},
@@ -70,7 +70,7 @@ func Test_getRules(t *testing.T) {
 		},
 	}
 
-	err := loadConfig()
+	err := LoadRulesConfig()
 	require.NoError(t, err)
 
 	for _, tt := range tests {

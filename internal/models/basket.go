@@ -1,12 +1,9 @@
 package models
 
 const (
-	Voucher                = "VOUCHER"
-	Tshirt                 = "TSHIRT"
-	Pants                  = "PANTS"
-	VoucherQuantity        = 1
-	PriceDiscount          = 19
-	TshirtQuantityDiscount = 3
+	Voucher = "VOUCHER"
+	Tshirt  = "TSHIRT"
+	Pants   = "PANTS"
 )
 
 var (
@@ -58,38 +55,4 @@ func (i *Item) WithOutDiscount() {
 	product := i.Product
 	discountAmount = product.Price * float64(i.Quantity)
 	i.Total = discountAmount
-}
-
-// Discount3OrMore function
-// Check if client buy 3 or more the same type
-// then we will apply a new price
-func Discount3OrMore(item Item) Item {
-	var discountAmount float64
-	product := item.Product
-	if item.Quantity >= TshirtQuantityDiscount {
-		discountAmount = PriceDiscount * float64(item.Quantity)
-		item.Total = discountAmount
-
-		return item
-	}
-
-	discountAmount = product.Price * float64(item.Quantity)
-	item.Total = discountAmount
-
-	return item
-}
-
-// DiscountBuyingTwoGetOneFree function
-// Check if client buy 1 or more the same type
-// gift one free
-func DiscountBuyingTwoGetOneFree(item Item) Item {
-	product := item.Product
-	total := product.Price * float64(item.Quantity)
-	if item.Quantity >= VoucherQuantity {
-		item.Quantity++
-	}
-
-	item.Total = total
-
-	return item
 }

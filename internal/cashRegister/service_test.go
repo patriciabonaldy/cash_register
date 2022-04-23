@@ -308,7 +308,7 @@ func TestService_CheckoutBasket(t *testing.T) {
 	service := NewService(RulesEngine, repositoryMock)
 	basketID := "4200f350-4fa5-11ec-a386-1e003b1e5256"
 
-	err := loadConfig()
+	err := LoadRulesConfig()
 	require.NoError(t, err)
 
 	basket, err := service.CheckoutBasket(context.Background(), basketID)

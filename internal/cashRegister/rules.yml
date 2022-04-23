@@ -1,7 +1,7 @@
 ---
 rules:
   buy_two_by_one_free:
-    quantity: 1
+    quantity: 2
     product: VOUCHER
     desc: "A 2-for-1 special on VOUCHER items."
     name: buy_two_by_one_free
