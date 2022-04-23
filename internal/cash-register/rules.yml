@@ -1,0 +1,14 @@
+---
+rules:
+  buy_two_by_one_free:
+    quantity: 1
+    product: VOUCHER
+    desc: "A 2-for-1 special on VOUCHER items."
+    name: buy_two_by_one_free
+
+  buy_three_or_more_new_price:
+    quantity: 3
+    product: TSHIRT
+    newPrice: 19
+    desc: "If you buy 3 or more, the price per unit should be 19.00€."
+    name: buy_three_or_more_new_price
