@@ -30,3 +30,26 @@ Examples:
 * Items: TSHIRT, TSHIRT, TSHIRT, VOUCHER, TSHIRT - Total: 81.00€ 
 * Items: VOUCHER, TSHIRT, VOUCHER, VOUCHER, PANTS, TSHIRT, TSHIRT - Total:
 74.50€
+
+## Endpoints
+
+name                                   method          description
+- /health                              GET             Check status of app is (live/died)
+
+- /baskets                             POST            Create a new basket
+- /baskets/:id                         GET             Get a basket
+- /baskets/:id                         DELETE          delete a basket
+
+- /baskets/:id/products/:code          POST            return basket with a new product
+
+- /baskets/:id/products/:code          DELETE          Return basket without this product
+
+- /baskets/:id/checkout   
+
+To watch, please click in the next link:
+
+http://localhost:8080/swagger/index.html#/
+
+These are detail endpoints
+
+![diagram](cmd/docs/img.png)
