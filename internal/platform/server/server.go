@@ -23,6 +23,8 @@ func New(port uint, service cashRegister.Service) Server {
 		service:  service,
 	}
 
+	srv.engine.TrustedPlatform = gin.PlatformGoogleAppEngine
+
 	srv.registerRoutes()
 	return srv
 }
