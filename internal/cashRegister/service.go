@@ -36,3 +36,16 @@ func (s Service) CreateBasket(ctx context.Context) (models.Basket, error) {
 
 	return basket, nil
 }
+
+// GetBasket return a basket.
+// require a basket id
+// it will return a basket if this is ok.
+// otherwise will return  error
+func (s Service) GetBasket(ctx context.Context, id string) (models.Basket, error) {
+	basket, err := s.repository.FindBasketByID(ctx, id)
+	if err != nil {
+		return models.Basket{}, err
+	}
+
+	return basket, nil
+}
