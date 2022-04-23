@@ -1,9 +1,8 @@
 package main
 
 import (
+	"github.com/patriciabonaldy/cash_register/api/cmd/bootstrap"
 	"log"
-
-	"github.com/patriciabonaldy/cash_register/cmd/bootstrap"
 )
 
 // @title API document title

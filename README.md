@@ -52,4 +52,79 @@ http://localhost:8080/swagger/index.html#/
 
 These are detail endpoints
 
-![diagram](cmd/docs/img.png)
+![diagram](api/cmd/docs/img.png)
+
+
+## Client
+
+Also you can run a local client instead of swagger
+
+
+To run client
+~~~bash
+go run client/cli.go
+
+Usage:
+  app [command]
+
+Examples:
+you can us the follow commands: create/add/remove/checkout
+
+Available Commands:
+  basket      call different operations
+Flags:
+  -h, --help   help for app
+
+
+~~~
+EXAMPLES:
+
+* create a new basket
+~~~bash
+go run client/cli.go basket create
+
+output:
+
+Basket created
+{"Code":"f855f846-5057-11ec-b55b-1e003b1e5256","Items":{},"Total":0,"Close":false}
+~~~
+
+* remove basket
+~~~bash
+go run client/cli.go basket remove fa4ae6e8-5057-11ec-b55b-1e003b1e5256
+
+output:
+
+basket ID deleted
+~~~
+
+* add a new product to a basket
+~~~bash
+go run client/cli.go basket add f855f846-5057-11ec-b55b-1e003b1e5256 TSHIRT
+
+output:
+
+product added
+~~~
+
+* close basket and get total amount
+~~~bash
+go run client/cli.go basket checkout f855f846-5057-11ec-b55b-1e003b1e5256
+
+output:
+
+Basket ID: f855f846-5057-11ec-b55b-1e003b1e5256
+Items:
+      Item: VOUCHER
+      Quantity: 1      Unit price: 7.5
+      Total With Discount:         7.5
+      Item: PENTS
+      Quantity: 4      Unit price: 5
+      Total With Discount:         15
+      Item: TSHIRT
+      Quantity: 4      Unit price: 20
+      Total With Discount:         60
+----------------------------------------
+Amount Total: 82.5
+
+~~~

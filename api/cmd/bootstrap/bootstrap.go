@@ -1,9 +1,9 @@
 package bootstrap
 
 import (
+	"github.com/patriciabonaldy/cash_register/api/cmd/bootstrap/handler"
 	"log"
 
-	"github.com/patriciabonaldy/cash_register/cmd/bootstrap/handler"
 	"github.com/patriciabonaldy/cash_register/internal/cashRegister"
 	"github.com/patriciabonaldy/cash_register/internal/platform/storage/memory"
 )

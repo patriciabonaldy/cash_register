@@ -2,23 +2,22 @@ package bootstrap
 
 import (
 	"fmt"
+	handler2 "github.com/patriciabonaldy/cash_register/api/cmd/bootstrap/handler"
+	"github.com/patriciabonaldy/cash_register/api/cmd/docs"
 	"log"
 
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
-
-	"github.com/patriciabonaldy/cash_register/cmd/bootstrap/handler"
-	"github.com/patriciabonaldy/cash_register/cmd/docs"
 )
 
 type Server struct {
 	httpAddr string
 	engine   *gin.Engine
-	handler  handler.Handler
+	handler  handler2.Handler
 }
 
-func New(port uint, handler handler.Handler) Server {
+func New(port uint, handler handler2.Handler) Server {
 	srv := Server{
 		engine:   gin.New(),
 		httpAddr: fmt.Sprintf(":%d", port),
@@ -55,7 +54,7 @@ func Middleware() gin.HandlerFunc {
 
 func (s *Server) registerRoutes() {
 	s.engine.Use(Middleware())
-	s.engine.GET("/health", handler.CheckHandler())
+	s.engine.GET("/health", handler2.CheckHandler())
 	basket := s.engine.Group("/baskets")
 	{
 		basket.POST("", s.handler.CreateBasketHandler())
