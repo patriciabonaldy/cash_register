@@ -1,8 +1,9 @@
-package cash_register
+package cashRegister
 
 import (
 	_ "embed"
 	"fmt"
+	"github.com/patriciabonaldy/cash_register/internal/models"
 
 	"gopkg.in/yaml.v3"
 )
@@ -25,8 +26,9 @@ type Rule struct {
 	Name     ruleName `yaml:"name"`
 	Desc     string   `yaml:"desc"`
 	Product  string   `yaml:"product"`
-	Quantity int64    `yaml:"quantity"`
+	Quantity int      `yaml:"quantity"`
 	NewPrice float64  `yaml:"newPrice,omitempty"`
+	fn       func(item *models.Item, rule Rule) *models.Item
 }
 
 // configRules are by default
@@ -34,8 +36,7 @@ var configRules config
 
 // loadConfig function load configuration of rules through yaml file
 func loadConfig() error {
-	var source config
-	err := yaml.Unmarshal(data, &source)
+	err := yaml.Unmarshal(data, &configRules)
 	if err != nil {
 		return fmt.Errorf("couldn't parse yaml file.: %s", err)
 	}

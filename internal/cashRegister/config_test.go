@@ -1,4 +1,4 @@
-package cash_register
+package cashRegister
 
 import (
 	"github.com/stretchr/testify/assert"
