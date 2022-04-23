@@ -16,4 +16,4 @@ type Repository interface {
 	RemoveBasket(ctx context.Context, id string) error
 }
 
-//go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=Repository
+//go:generate mockery --case=snake --outpkg=storagemocks --output=storagemocks --name=Repository
