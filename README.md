@@ -1,4 +1,4 @@
-Nextail is thinking about expanding its business and not only forecast sales in the stores but
+PepitoStore is thinking about expanding its business and not only forecast sales in the stores but
 also manage the cash register. The first store where we will introduce our software will sell the
 following 3 products.
 ```
@@ -57,7 +57,7 @@ These are detail endpoints
 
 ## Client
 
-Also you can run a local client instead of swagger
+Also, you can run a local client instead of swagger
 
 
 To run client
