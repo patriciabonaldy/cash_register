@@ -4,6 +4,9 @@ following 3 products.
 ```
 Code         | Name              |  Price
 -----------------------------------------------
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cb5b95d192de4f4b9221917bcc3f2968)](https://app.codacy.com/gh/patriciabonaldy/cash_register?utm_source=github.com&utm_medium=referral&utm_content=patriciabonaldy/cash_register&utm_campaign=Badge_Grade_Settings)
+
 VOUCHER      | Gift Card         |   5.00€
 TSHIRT       | Summer T-Shirt    |  20.00€
 PANTS        | Summer Pants      |   7.50€
