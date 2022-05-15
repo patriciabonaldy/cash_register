@@ -1,3 +1,6 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/dfc4c05a474a4421866b0952b1b25b83)](https://www.codacy.com/gh/patriciabonaldy/cash_register/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=patriciabonaldy/cash_register&amp;utm_campaign=Badge_Grade)
+
+
 PepitoStore is thinking about expanding its business and not only forecast sales in the stores but
 also manage the cash register. The first store where we will introduce our software will sell the
 following 3 products.
